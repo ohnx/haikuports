@@ -4,13 +4,13 @@ graphical point-and-click adventure games, provided you already have their \
 data files. The clever part about this: ScummVM just replaces the executables \
 shipped with the games, allowing you to play them on systems for which they \
 were never designed!"
-HOMEPAGE="http://scummvm.org"
+HOMEPAGE="https://www.scummvm.org/"
 COPYRIGHT="2001-2014 ScummVM Team"
 LICENSE="GNU GPL v2"
-REVISION="3"
-SOURCE_URI="http://sourceforge.net/projects/scummvm/files/scummvm/1.7.0/scummvm-1.7.0.tar.gz"
-CHECKSUM_SHA256="aaee99d06b9c55e1359556908b5faeccfa017f2fdf5d1f3cf978dfb02b5bc301"
-ADDITIONAL_FILES="scummvm.rdef"
+REVISION="2"
+SOURCE_URI="http://scummvm.org/frs/scummvm/$portVersion/scummvm-$portVersion.tar.xz"
+CHECKSUM_SHA256="2417edcb1ad51ca05a817c58aeee610bc6db5442984e8cf28e8a5fd914e8ae05"
+ADDITIONAL_FILES="scummvm.rdef.in"
 
 ARCHITECTURES="!x86_gcc2 x86 ?x86_64"
 SECONDARY_ARCHITECTURES="x86"
@@ -19,18 +19,24 @@ PROVIDES="
 	scummvm$secondaryArchSuffix = $portVersion
 	app:scummvm$secondaryArchSuffix = $portVersion
 	"
+
 REQUIRES="
 	haiku$secondaryArchSuffix
+	#lib:libcurl$secondaryArchSuffix #not needed yet
+	lib:libbz2$secondaryArchSuffix
 	lib:libfaad$secondaryArchSuffix
-	lib:libFLAC$secondaryArchSuffix
+	lib:libflac$secondaryArchSuffix
 	lib:libfreetype$secondaryArchSuffix
 	lib:libfluidsynth$secondaryArchSuffix
+	lib:libgl$secondaryArchSuffix
+	lib:libglu$secondaryArchSuffix
 	lib:libjpeg$secondaryArchSuffix
 	lib:libmad$secondaryArchSuffix
 	lib:libmpeg2$secondaryArchSuffix
 	lib:libogg$secondaryArchSuffix
-	lib:libpng$secondaryArchSuffix
+	lib:libpng16$secondaryArchSuffix
 	lib:libSDL$secondaryArchSuffix
+	#lib:libsdl_net$secondaryArchSuffix #not needed yet
 	lib:libtheora$secondaryArchSuffix
 	lib:libvorbis$secondaryArchSuffix
 	lib:libz$secondaryArchSuffix
@@ -38,12 +44,13 @@ REQUIRES="
 
 BUILD_REQUIRES="
 	haiku${secondaryArchSuffix}_devel
+	#devel:libcurl$secondaryArchSuffix #not needed yet
 	devel:libbz2$secondaryArchSuffix
 	devel:libfaad$secondaryArchSuffix
-	devel:libFLAC$secondaryArchSuffix
+	devel:libflac$secondaryArchSuffix
 	devel:libfreetype$secondaryArchSuffix
 	devel:libfluidsynth$secondaryArchSuffix
-	devel:libGL$secondaryArchSuffix
+	devel:libgl$secondaryArchSuffix
 	devel:libglu$secondaryArchSuffix
 	devel:libjpeg$secondaryArchSuffix
 	devel:libmad$secondaryArchSuffix
@@ -51,15 +58,16 @@ BUILD_REQUIRES="
 	devel:libogg$secondaryArchSuffix
 	devel:libpng$secondaryArchSuffix
 	devel:libSDL$secondaryArchSuffix
+	#devel:libsdl_net$secondaryArchSuffix #not needed yet
 	devel:libtheora$secondaryArchSuffix
 	devel:libvorbis$secondaryArchSuffix
 	devel:libz$secondaryArchSuffix
 	"
+
 BUILD_PREREQUIRES="
 	cmd:gcc$secondaryArchSuffix
-	cmd:git
 	cmd:ld$secondaryArchSuffix
-	cmd:libtoolize
+	cmd:libtoolize$secondaryArchSuffix
 	cmd:make
 	cmd:nasm
 	cmd:pkg_config$secondaryArchSuffix
@@ -69,14 +77,13 @@ BUILD()
 {
 	libtoolize --force --copy --install
 	CPPFLAGS=`freetype-config --cflags` ./configure --prefix=$prefix \
-	--bindir=$appsDir --libdir=$libDir --datarootdir=$dataDir \
-	--mandir=$manDir --docdir=$docDir \
-	--disable-debug --enable-release #--disable-all-engines
-	#the default build doesn't build all engines, those that are still under
-	#construction can be built with --enable-all-engines for testing purposes
-	#--disable-all-engines can be used to only compile scummvm without
-	#engines, which makes it build faster
-
+		--bindir=$appsDir --libdir=$libDir --datarootdir=$dataDir \
+		--mandir=$manDir --docdir=$docDir \
+		--disable-debug --enable-release --disable-eventrecorder \
+		#--disable-all-engines #can be used to compile scummvm without \
+		#engines, which makes it build faster (to test), those that \
+		#are still under construction can be built with --enable-all-engines \
+		#for testing purposes
 	make $jobArgs
 }
 
@@ -84,8 +91,23 @@ INSTALL()
 {
 	make install
 	mv $appsDir/scummvm $appsDir/ScummVM
-	addResourcesToBinaries $portDir/additional-files/scummvm.rdef \
+
+	local MAJOR="`echo "$portVersion" | cut -d. -f1`"
+	local MIDDLE="`echo "$portVersion" | cut -d. -f2`"
+	local MINOR="`echo "$portVersion" | cut -d. -f3`"
+	sed \
+		-e "s|@MAJOR@|$MAJOR|" \
+		-e "s|@MIDDLE@|$MIDDLE|" \
+		-e "s|@MINOR@|$MINOR|" \
+		$portDir/additional-files/scummvm.rdef.in > scummvm.rdef
+
+	addResourcesToBinaries scummvm.rdef \
 		$appsDir/ScummVM
 
-	addAppDeskbarSymlink $appsDir/ScummVM ScummVM
+	addAppDeskbarSymlink $appsDir/ScummVM
+}
+
+TEST()
+{
+	make test
 }
