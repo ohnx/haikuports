@@ -1,30 +1,30 @@
-SUMMARY="A tool to convert video from nearly any format to modern codecs." 
+SUMMARY="A tool to convert video from nearly any format to modern codecs"
 DESCRIPTION="Handbrake is an open-source, GPL-licensed, multiplatform, \
 multithreaded video transcoder.
 Convert from many common multimedia file formats, including unprotected \
-DVD or BluRay sources to a handful of modern output file formats.
-"
-HOMEPAGE="http://www.handbrake.fr"
+DVD or BluRay sources to a handful of modern output file formats."
+HOMEPAGE="http://handbrake.fr/"
 LICENSE="GNU GPL v2"
-COPYRIGHT="2003-2015 HandBrake Team"
-REVISION="1"
-SRC_URI="https://handbrake.fr/rotation.php?file=HandBrake-$portVersion.tar.bz2"
-SRC_FILENAME="HandBrake-$portVersion.tar.bz2"
-CHECKSUM_SHA256="7ea42031fd4d5efd04903a9aae79c952c50fd43b6f7bf08fd1a93f6b358a23f5"
+COPYRIGHT="2003-2016 HandBrake Team"
+REVISION="2"
+SOURCE_URI="http://download.handbrake.fr/releases/$portVersion/HandBrake-$portVersion.tar.bz2"
+CHECKSUM_SHA256="fb9230dd121b456f6829d1d25ac8bbf76e503b51c4efc70f0a7fd2bb8607e2f0"
 SOURCE_DIR="HandBrake-$portVersion"
-ARCHITECTURES="x86_gcc2 x86 x86_64"
-SECONDARY_ARCHITECTURES="x86"
+PATCHES="handbrake-$portVersion.patchset"
+ADDITIONAL_FILES="HandBrake.rdef"
 
-PATCHES="handbrake-0.10.0.patchset"
+ARCHITECTURES="!x86_gcc2 x86 x86_64"
+SECONDARY_ARCHITECTURES="x86"
 
 PROVIDES="
 	handbrake$secondaryArchSuffix = $portVersion
 	cmd:HandBrakeCLI
+#	app:HandBrake
 	"
 REQUIRES="
 	haiku$secondaryArchSuffix
 	lib:liba52$secondaryArchSuffix
-	lib:libavcodec$secondaryArchSuffix >= 56
+	lib:libavcodec$secondaryArchSuffix >= 57
 	lib:libmpeg2$secondaryArchSuffix
 	lib:libmp4v2$secondaryArchSuffix
 	lib:libogg$secondaryArchSuffix
@@ -46,12 +46,12 @@ REQUIRES="
 	lib:libbz2$secondaryArchSuffix
 	lib:libz$secondaryArchSuffix
 	lib:libxml2$secondaryArchSuffix
-	lib:libstdc++$secondaryArchSuffix
 	"
+
 BUILD_REQUIRES="
 	haiku${secondaryArchSuffix}_devel
 	devel:liba52$secondaryArchSuffix
-	devel:libavcodec$secondaryArchSuffix
+	devel:libavcodec$secondaryArchSuffix >= 57
 	devel:libmpeg2$secondaryArchSuffix
 	devel:libmp4v2$secondaryArchSuffix
 	devel:libogg$secondaryArchSuffix
@@ -77,28 +77,31 @@ BUILD_REQUIRES="
 BUILD_PREREQUIRES="
 	cmd:gcc$secondaryArchSuffix
 	cmd:make
-	cmd:libtoolize
+	cmd:libtoolize$secondaryArchSuffix
 	cmd:autoconf
 	cmd:automake
-	#cmd:yasm
 	cmd:patch
 	cmd:python
 	cmd:m4
+	cmd:sed
 	cmd:tar
-"
+	"
+
+# Please check the file state.md in this directory for a detailed description
+# of the current state of the HandBrake port
 
 PATCH()
 {
-	sed -i 's/MODULES += contrib\/.*//g' make/include/main.defs	
+	sed -i 's/MODULES += contrib\/.*//g' make/include/main.defs
 }
 
 BUILD()
 {
-	cp make/variant/linux.defs make/variant/haiku.defs
-	
 	./configure --prefix=$prefix --force --disable-x265
 	cd build
 	make
+	cd ../haiku
+#	make
 }
 
 INSTALL()
@@ -106,6 +109,19 @@ INSTALL()
 	cd build
 	make install
 
-	#addResourcesToBinaries handbrake.rdef $binDir/HandBrake
-	#addAppDeskbarSymlink $binDir/HandBrake "HandBrake"
+#	cd ../haiku
+#	cp haiku/HandBrake $appsDir
+
+	local MAJOR="`echo "$portVersion" | cut -d. -f1`"
+	local MIDDLE="`echo "$portVersion" | cut -d. -f2`"
+	local MINOR="`echo "$portVersion" | cut -d. -f3`"
+	sed \
+		-e "s|@MAJOR@|$MAJOR|" \
+		-e "s|@MIDDLE@|$MIDDLE|" \
+		-e "s|@MINOR@|$MINOR|" \
+		$portDir/additional-files/HandBrake.rdef > HandBrake.rdef
+
+	addResourcesToBinaries HandBrake.rdef $prefix/bin/HandBrakeCLI
+#	addResourcesToBinaries handBrake.rdef $appsDir/HandBrake
+#	addAppDeskbarSymlink $appsDir/HandBrake
 }
