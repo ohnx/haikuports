@@ -3,12 +3,12 @@ DESCRIPTION="AVRDUDE is an utility to download/upload/manipulate the ROM and \
 EEPROM contents of AVR microcontrollers using the in-system programming \
 technique (ISP)."
 HOMEPAGE="http://www.nongnu.org/avrdude/"
-COPYRIGHT="2003-2013 Brian S. Dean"
+COPYRIGHT="2003-2016 Brian S. Dean"
 LICENSE="GNU GPL v2"
-REVISION="2"
-SOURCE_URI="http://download.savannah.gnu.org/releases/avrdude/avrdude-6.0.1.tar.gz"
-CHECKSUM_SHA256="c6804668dfa96b23185dfe2e8239089af4e4ae0b11aa7435bebb28c3260ede41"
-PATCHES="avrdude-6.0.1.patch"
+REVISION="1"
+SOURCE_URI="http://download.savannah.gnu.org/releases/avrdude/avrdude-6.3.tar.gz"
+CHECKSUM_SHA256="0f9f731b6394ca7795b88359689a7fa1fba818c6e1d962513eb28da670e0a196"
+PATCHES="avrdude-6.3.patchset"
 
 ARCHITECTURES="!x86_gcc2 x86 x86_64"
 SECONDARY_ARCHITECTURES="x86"
@@ -19,6 +19,7 @@ GLOBAL_WRITABLE_FILES="
 
 PROVIDES="
 	avrdude$secondaryArchSuffix = $portVersion
+	lib:libavrdude$secondaryArchSuffix = $portVersion
 	cmd:avrdude$secondaryArchSuffix = $portVersion
 	"
 REQUIRES="
@@ -39,6 +40,7 @@ BUILD_PREREQUIRES="
 	cmd:ld$secondaryArchSuffix
 	cmd:automake
 	cmd:autoconf
+	cmd:libtool
 	cmd:make
 	cmd:yacc
 	cmd:flex
@@ -47,10 +49,8 @@ BUILD_PREREQUIRES="
 
 BUILD()
 {
+	libtoolize --force --copy --install
 	export PKG_CONFIG_LIBDIR=/system/develop/lib/x86/pkgconfig/
-	aclocal
-	autoconf
-	automake
 	runConfigure ./configure
 	make $jobArgs
 }
@@ -58,4 +58,6 @@ BUILD()
 INSTALL()
 {
 	make install
+	rm $libDir/lib*.a
+	rm $libDir/lib*.la
 }
