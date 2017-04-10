@@ -6,13 +6,13 @@ Subject: haiku: fix header search paths
 * /boot/develop no longer exists
 * /boot/common no longer exists
 
-diff --git a/cfe-3.7.0.src/lib/Frontend/InitHeaderSearch.cpp b/cfe-3.7.0.src/lib/Frontend/InitHeaderSearch.cpp
+diff --git a/cfe-3.7.1.src/lib/Frontend/InitHeaderSearch.cpp b/cfe-3.7.1.src/lib/Frontend/InitHeaderSearch.cpp
 index e3a17c9..e785bec 100644
---- a/cfe-3.7.0.src/lib/Frontend/InitHeaderSearch.cpp
-+++ b/cfe-3.7.0.src/lib/Frontend/InitHeaderSearch.cpp
+--- a/cfe-3.7.1.src/lib/Frontend/InitHeaderSearch.cpp
++++ b/cfe-3.7.1.src/lib/Frontend/InitHeaderSearch.cpp
 @@ -266,38 +266,41 @@ void InitHeaderSearch::AddDefaultCIncludePaths(const llvm::Triple &triple,
    }
- 
+
    case llvm::Triple::Haiku:
 -    AddPath("/boot/common/include", System, false);
 -    AddPath("/boot/develop/headers/os", System, false);
@@ -84,7 +84,7 @@ index e3a17c9..e785bec 100644
      break;
    case llvm::Triple::RTEMS:
      break;
--- 
+--
 2.2.2
 
 
@@ -94,20 +94,20 @@ Date: Sun, 1 Feb 2015 15:15:45 +0000
 Subject: libclang: add soname when building on Haiku.
 
 
-diff --git a/cfe-3.7.0.src/tools/libclang/Makefile b/cfe-3.7.0.src/tools/libclang/Makefile
+diff --git a/cfe-3.7.1.src/tools/libclang/Makefile b/cfe-3.7.1.src/tools/libclang/Makefile
 index 84914e0..b9a6b74 100644
---- a/cfe-3.7.0.src/tools/libclang/Makefile
-+++ b/cfe-3.7.0.src/tools/libclang/Makefile
+--- a/cfe-3.7.1.src/tools/libclang/Makefile
++++ b/cfe-3.7.1.src/tools/libclang/Makefile
 @@ -35,7 +35,7 @@ USEDLIBS = clangIndex.a clangARCMigrate.a \
  include $(CLANG_LEVEL)/Makefile
- 
+
  # Add soname to the library.
 -ifeq ($(HOST_OS), $(filter $(HOST_OS), Linux FreeBSD GNU GNU/kFreeBSD))
 +ifeq ($(HOST_OS), $(filter $(HOST_OS), Linux FreeBSD GNU GNU/kFreeBSD Haiku))
          LLVMLibsOptions += -Wl,-soname,lib$(LIBRARYNAME)$(SHLIBEXT)
  endif
- 
--- 
+
+--
 2.2.2
 
 
@@ -118,10 +118,10 @@ Subject: don't include c++ headers in C include search paths.
 
 * define a Haiku toolchain, and add c++ headers path.
 
-diff --git a/cfe-3.7.0.src/lib/Driver/Driver.cpp b/cfe-3.7.0.src/lib/Driver/Driver.cpp
+diff --git a/cfe-3.7.1.src/lib/Driver/Driver.cpp b/cfe-3.7.1.src/lib/Driver/Driver.cpp
 index 180c412..df42ca2 100644
---- a/cfe-3.7.0.src/lib/Driver/Driver.cpp
-+++ b/cfe-3.7.0.src/lib/Driver/Driver.cpp
+--- a/cfe-3.7.1.src/lib/Driver/Driver.cpp
++++ b/cfe-3.7.1.src/lib/Driver/Driver.cpp
 @@ -2195,6 +2195,9 @@ const ToolChain &Driver::getToolChain(const ArgList &Args,
      case llvm::Triple::Solaris:
        TC = new toolchains::Solaris(*this, Target, Args);
@@ -132,14 +132,14 @@ index 180c412..df42ca2 100644
      case llvm::Triple::Win32:
        switch (Target.getEnvironment()) {
        default:
-diff --git a/cfe-3.7.0.src/lib/Driver/ToolChains.cpp b/cfe-3.7.0.src/lib/Driver/ToolChains.cpp
+diff --git a/cfe-3.7.1.src/lib/Driver/ToolChains.cpp b/cfe-3.7.1.src/lib/Driver/ToolChains.cpp
 index 15e36a1..8599754 100644
---- a/cfe-3.7.0.src/lib/Driver/ToolChains.cpp
-+++ b/cfe-3.7.0.src/lib/Driver/ToolChains.cpp
+--- a/cfe-3.7.1.src/lib/Driver/ToolChains.cpp
++++ b/cfe-3.7.1.src/lib/Driver/ToolChains.cpp
 @@ -2523,6 +2523,34 @@ Tool *CloudABI::buildLinker() const {
    return new tools::cloudabi::Linker(*this);
  }
- 
+
 +/// Haiku - Haiku tool chain which can call as(1) and ld(1) directly.
 +
 +Haiku::Haiku(const Driver &D, const llvm::Triple& Triple, const ArgList &Args)
@@ -169,16 +169,16 @@ index 15e36a1..8599754 100644
 +}
 +
  /// OpenBSD - OpenBSD tool chain which can call as(1) and ld(1) directly.
- 
+
  OpenBSD::OpenBSD(const Driver &D, const llvm::Triple &Triple,
-diff --git a/cfe-3.7.0.src/lib/Driver/ToolChains.h b/cfe-3.7.0.src/lib/Driver/ToolChains.h
+diff --git a/cfe-3.7.1.src/lib/Driver/ToolChains.h b/cfe-3.7.1.src/lib/Driver/ToolChains.h
 index 59eaade..4d38413 100644
---- a/cfe-3.7.0.src/lib/Driver/ToolChains.h
-+++ b/cfe-3.7.0.src/lib/Driver/ToolChains.h
+--- a/cfe-3.7.1.src/lib/Driver/ToolChains.h
++++ b/cfe-3.7.1.src/lib/Driver/ToolChains.h
 @@ -560,6 +560,18 @@ private:
    void findGccLibDir();
  };
- 
+
 +class LLVM_LIBRARY_VISIBILITY Haiku : public Generic_ELF {
 +public:
 +  Haiku(const Driver &D, const llvm::Triple &Triple,
@@ -194,10 +194,10 @@ index 59eaade..4d38413 100644
  class LLVM_LIBRARY_VISIBILITY OpenBSD : public Generic_ELF {
  public:
    OpenBSD(const Driver &D, const llvm::Triple &Triple,
-diff --git a/cfe-3.7.0.src/lib/Frontend/InitHeaderSearch.cpp b/cfe-3.7.0.src/lib/Frontend/InitHeaderSearch.cpp
+diff --git a/cfe-3.7.1.src/lib/Frontend/InitHeaderSearch.cpp b/cfe-3.7.1.src/lib/Frontend/InitHeaderSearch.cpp
 index e785bec..eda9455 100644
---- a/cfe-3.7.0.src/lib/Frontend/InitHeaderSearch.cpp
-+++ b/cfe-3.7.0.src/lib/Frontend/InitHeaderSearch.cpp
+--- a/cfe-3.7.1.src/lib/Frontend/InitHeaderSearch.cpp
++++ b/cfe-3.7.1.src/lib/Frontend/InitHeaderSearch.cpp
 @@ -294,8 +294,6 @@ void InitHeaderSearch::AddDefaultCIncludePaths(const llvm::Triple &triple,
      AddPath("/boot/system/develop/headers/os/be_apps/Deskbar", System, false);
      AddPath("/boot/system/develop/headers/os/be_apps/NetPositive", System, false);
@@ -207,7 +207,7 @@ index e785bec..eda9455 100644
      AddPath("/boot/system/develop/headers/3rdparty", System, false);
      AddPath("/boot/system/develop/headers/bsd", System, false);
      AddPath("/boot/system/develop/headers/glibc", System, false);
--- 
+--
 2.2.2
 
 
@@ -217,14 +217,14 @@ Date: Thu, 14 Jan 2016 19:19:14 +0000
 Subject: add Haiku target info for x86_64
 
 
-diff --git a/cfe-3.7.0.src/lib/Basic/Targets.cpp b/cfe-3.7.0.src/lib/Basic/Targets.cpp
+diff --git a/cfe-3.7.1.src/lib/Basic/Targets.cpp b/cfe-3.7.1.src/lib/Basic/Targets.cpp
 index e4db004..a638e24 100644
---- a/cfe-3.7.0.src/lib/Basic/Targets.cpp
-+++ b/cfe-3.7.0.src/lib/Basic/Targets.cpp
+--- a/cfe-3.7.1.src/lib/Basic/Targets.cpp
++++ b/cfe-3.7.1.src/lib/Basic/Targets.cpp
 @@ -351,6 +351,30 @@ public:
    }
  };
- 
+
 +// Haiku Target
 +template<typename Target>
 +class HaikuTargetInfo : public OSTargetInfo<Target> {
@@ -255,7 +255,7 @@ index e4db004..a638e24 100644
 @@ -3772,25 +3796,6 @@ public:
    }
  };
- 
+
 -// x86-32 Haiku target
 -class HaikuX86_32TargetInfo : public X86_32TargetInfo {
 -public:
@@ -282,7 +282,7 @@ index e4db004..a638e24 100644
      if(Name == "generic") {
        auto subarch = getTriple().getSubArch();
        switch (subarch) {
--        case llvm::Triple::SubArchType::ARMSubArch_v8_1a: 
+-        case llvm::Triple::SubArchType::ARMSubArch_v8_1a:
 +        case llvm::Triple::SubArchType::ARMSubArch_v8_1a:
            return "8_1A";
          default:
@@ -291,7 +291,7 @@ index e4db004..a638e24 100644
      if(Name == "generic") {
        auto subarch = getTriple().getSubArch();
        switch (subarch) {
--        case llvm::Triple::SubArchType::ARMSubArch_v8_1a: 
+-        case llvm::Triple::SubArchType::ARMSubArch_v8_1a:
 +        case llvm::Triple::SubArchType::ARMSubArch_v8_1a:
            return "A";
          default:
@@ -314,6 +314,6 @@ index e4db004..a638e24 100644
      case llvm::Triple::NaCl:
        return new NaClTargetInfo<X86_64TargetInfo>(Triple);
      case llvm::Triple::PS4:
--- 
+--
 2.2.2
 
