@@ -1,4 +1,4 @@
-From b3b154c6783c97da7e9336d50016364426cdfa17 Mon Sep 17 00:00:00 2001
+From 0bf8fa31fb049edda14a40cbc7e09ec3c6b194b9 Mon Sep 17 00:00:00 2001
 From: Alexander von Gluck IV <kallisti5@unixzen.com>
 Date: Wed, 22 Jan 2014 05:04:31 +0000
 Subject: haiku: fix Host.h for endian.h
@@ -21,7 +21,7 @@ index 8f4bf3c..8114f9b 100644
 2.2.2
 
 
-From c5722091d833cc7569a960efa775dc33f2d2a485 Mon Sep 17 00:00:00 2001
+From 497ff8cdee5a4643776d5d26d8e41faa770b4ad8 Mon Sep 17 00:00:00 2001
 From: Adrien Destugues <pulkomandy@pulkomandy.tk>
 Date: Sun, 18 May 2014 12:41:16 +0200
 Subject: libLTO: add soname when building on Haiku.
@@ -46,7 +46,7 @@ index 530c05a..ffa76d2 100644
 2.2.2
 
 
-From 15f54ff914d0193b2ea2e0a8bb12c0dc4868fb5d Mon Sep 17 00:00:00 2001
+From 0178a4ef01a4f860586e7b7f4c0f937367851158 Mon Sep 17 00:00:00 2001
 From: Jerome Duval <jerome.duval@gmail.com>
 Date: Wed, 20 Jan 2016 21:13:28 +0000
 Subject: llvm-config: use /develop/headers instead of /include

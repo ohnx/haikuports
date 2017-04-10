@@ -31,13 +31,13 @@ other than the ones listed above.
 HOMEPAGE="http://www.llvm.org/"
 COPYRIGHT="2003-2014 University of Illinois at Urbana-Champaign"
 LICENSE="UIUC"
-REVISION="3"
+REVISION="2"
 SOURCE_URI="http://llvm.org/releases/${portVersion}/llvm-${portVersion}.src.tar.xz"
 SOURCE_URI_2="http://llvm.org/releases/${portVersion}/cfe-${portVersion}.src.tar.xz"
 SOURCE_URI_3="http://llvm.org/releases/${portVersion}/clang-tools-extra-${portVersion}.src.tar.xz"
-CHECKSUM_SHA256="ab45895f9dcdad1e140a3a79fd709f64b05ad7364e308c0e582c5b02e9cc3153"
-CHECKSUM_SHA256_2="4ed740c5a91df1c90a4118c5154851d6a475f39a91346bdf268c1c29c13aa1cc"
-CHECKSUM_SHA256_3="8ae8a0a3a96b7a700412d67df0af172cb2fc1326beec575fcc0f71d2e72709cd"
+CHECKSUM_SHA256="be7794ed0cec42d6c682ca8e3517535b54555a3defabec83554dbc74db545ad5"
+CHECKSUM_SHA256_2="56e2164c7c2a1772d5ed2a3e57485ff73ff06c97dff12edbeea1acc4412b0674"
+CHECKSUM_SHA256_3="4a91edaccad1ce984c7c49a4a87db186b7f7b21267b2b03bcf4bd7820715bc6b"
 SOURCE_DIR="llvm-$portVersion.src"
 PATCHES="llvm-${portVersion}.patchset"
 PATCHES_2="clang-${portVersion}.patchset"
@@ -217,6 +217,7 @@ PROVIDES_clang="
 	cmd:clang_rename = $portVersion
 	cmd:clang_tblgen = $portVersion
 	cmd:clang_tidy = $portVersion
+	cmd:c_index_test = $portVersion
 	cmd:pp_trace = $portVersion
 	lib:libclang$secondaryArchSuffix = $portVersion
 	devel:libclang$secondaryArchSuffix = $portVersion
@@ -265,6 +266,7 @@ PROVIDES_clang_analysis="
 	"
 REQUIRES_clang_analysis="
 	llvm${secondaryArchSuffix}_clang == $portVersion base
+	cmd:python
 	"
 BUILD_REQUIRES="
 	haiku${secondaryArchSuffix}_devel
@@ -317,118 +319,7 @@ INSTALL()
 	# not all arches contain the same libraries. The inventory for each arch
 	# also changes between releases... so lets KISS.
 	prepareInstalledDevelLibs \
-		libLLVMAArch64AsmParser \
-		libLLVMAArch64AsmPrinter \
-		libLLVMAArch64CodeGen \
-		libLLVMAArch64Desc \
-		libLLVMAArch64Disassembler \
-		libLLVMAArch64Info \
-		libLLVMAArch64Utils \
-		libLLVMAMDGPUAsmParser \
-		libLLVMAMDGPUAsmPrinter \
-		libLLVMAMDGPUCodeGen \
-		libLLVMAMDGPUDesc \
-		libLLVMAMDGPUInfo \
-		libLLVMAMDGPUUtils \
-		libLLVMARMAsmParser \
-		libLLVMARMAsmPrinter \
-		libLLVMARMCodeGen \
-		libLLVMARMDesc \
-		libLLVMARMDisassembler \
-		libLLVMARMInfo \
-		libLLVMAnalysis \
-		libLLVMAsmParser \
-		libLLVMAsmPrinter \
-		libLLVMBPFAsmPrinter \
-		libLLVMBPFCodeGen \
-		libLLVMBPFDesc \
-		libLLVMBPFInfo \
-		libLLVMBitReader \
-		libLLVMBitWriter \
-		libLLVMCodeGen \
-		libLLVMCore \
-		libLLVMCppBackendCodeGen \
-		libLLVMCppBackendInfo \
-		libLLVMDebugInfoDWARF \
-		libLLVMDebugInfoPDB \
-		libLLVMExecutionEngine \
-		libLLVMHexagonCodeGen \
-		libLLVMHexagonDesc \
-		libLLVMHexagonDisassembler \
-		libLLVMHexagonInfo \
-		libLLVMIRReader \
-		libLLVMInstCombine \
-		libLLVMInstrumentation \
-		libLLVMInterpreter \
-		libLLVMLTO \
-		libLLVMLibDriver \
-		libLLVMLineEditor \
-		libLLVMLinker \
-		libLLVMMC \
-		libLLVMMCDisassembler \
-		libLLVMMCJIT \
-		libLLVMMCParser \
-		libLLVMMIRParser \
-		libLLVMMSP430AsmPrinter \
-		libLLVMMSP430CodeGen \
-		libLLVMMSP430Desc \
-		libLLVMMSP430Info \
-		libLLVMMipsAsmParser \
-		libLLVMMipsAsmPrinter \
-		libLLVMMipsCodeGen \
-		libLLVMMipsDesc \
-		libLLVMMipsDisassembler \
-		libLLVMMipsInfo \
-		libLLVMNVPTXAsmPrinter \
-		libLLVMNVPTXCodeGen \
-		libLLVMNVPTXDesc \
-		libLLVMNVPTXInfo \
-		libLLVMObjCARCOpts \
-		libLLVMObject \
-		libLLVMOption \
-		libLLVMOrcJIT \
-		libLLVMPasses \
-		libLLVMPowerPCAsmParser \
-		libLLVMPowerPCAsmPrinter \
-		libLLVMPowerPCCodeGen \
-		libLLVMPowerPCDesc \
-		libLLVMPowerPCDisassembler \
-		libLLVMPowerPCInfo \
-		libLLVMProfileData \
-		libLLVMRuntimeDyld \
-		libLLVMScalarOpts \
-		libLLVMSelectionDAG \
-		libLLVMSparcAsmParser \
-		libLLVMSparcAsmPrinter \
-		libLLVMSparcCodeGen \
-		libLLVMSparcDesc \
-		libLLVMSparcDisassembler \
-		libLLVMSparcInfo \
-		libLLVMSupport \
-		libLLVMSystemZAsmParser \
-		libLLVMSystemZAsmPrinter \
-		libLLVMSystemZCodeGen \
-		libLLVMSystemZDesc \
-		libLLVMSystemZDisassembler \
-		libLLVMSystemZInfo \
-		libLLVMTableGen \
-		libLLVMTarget \
-		libLLVMTransformUtils \
-		libLLVMVectorize \
-		libLLVMX86AsmParser \
-		libLLVMX86AsmPrinter \
-		libLLVMX86CodeGen \
-		libLLVMX86Desc \
-		libLLVMX86Disassembler \
-		libLLVMX86Info \
-		libLLVMX86Utils \
-		libLLVMXCoreAsmPrinter \
-		libLLVMXCoreCodeGen \
-		libLLVMXCoreDesc \
-		libLLVMXCoreDisassembler \
-		libLLVMXCoreInfo \
-		libLLVMipa \
-		libLLVMipo \
+		libLLVM* \
 		libLTO
 
 	make -C tools/clang install PROJ_datadir=$dataDir PROJ_docsdir=$docDir \
@@ -450,10 +341,12 @@ INSTALL()
 
 	# analysis package
 	packageEntries clang \
+		$binDir/c-index-test \
 		$binDir/clang* \
 		$binDir/pp-trace \
 		$includeDir/clang* \
 		$libDir/libclang* \
+		$libDir/clang \
 		$developLibDir/libclang* \
 		$developLibDir/libmodernizeCore*
 
