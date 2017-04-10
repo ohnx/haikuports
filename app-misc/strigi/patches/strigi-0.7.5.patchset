@@ -1,16 +1,8 @@
-From 963443070677dc28be0edba24053dede8560fb2e Mon Sep 17 00:00:00 2001
-From: Augustin Cavalier <waddlesplash@gmail.com>
-Date: Mon, 14 Jul 2014 16:33:25 -0400
-Subject: [PATCH] Fix Strigi on Haiku.
+From 18d23a53c49eb056bdba8244fe6a1025435090cb Mon Sep 17 00:00:00 2001
+From: Builder kitt <hpkg-builder@haiku-os.org>
+Date: Mon, 8 Aug 2016 04:39:06 +0200
+Subject: applying patch strigi-0.7.5.patch
 
----
- libstreamanalyzer/lib/saxeventanalyzer.cpp                   | 2 +-
- strigiclient/lib/CMakeLists.txt                              | 1 -
- strigiclient/lib/searchclient/CMakeLists.txt                 | 4 +++-
- strigidaemon/CMakeLists.txt                                  | 2 +-
- strigidaemon/bin/daemon/eventlistener/eventlistenerqueue.cpp | 2 +-
- strigidaemon/bin/daemon/strigithread.cpp                     | 3 ++-
- 6 files changed, 8 insertions(+), 6 deletions(-)
 
 diff --git a/libstreamanalyzer/lib/saxeventanalyzer.cpp b/libstreamanalyzer/lib/saxeventanalyzer.cpp
 index 1e5b386..d37857c 100644
@@ -101,5 +93,28 @@ index f2ddaed..ce87f70 100644
      // start the actual work
      thread->run(0);
 -- 
-1.8.3.4
+2.7.0
+
+
+From 5cb84a57d606bae6322c76ee35570f66474f4714 Mon Sep 17 00:00:00 2001
+From: Adrien Destugues <pulkomandy@pulkomandy.tk>
+Date: Fri, 4 Nov 2016 21:16:26 +0100
+Subject: strigi: fix files installed to /share.
+
+
+diff --git a/libstreamanalyzer/CMakeLists.txt b/libstreamanalyzer/CMakeLists.txt
+index ded9c2e..c4fe683 100644
+--- a/libstreamanalyzer/CMakeLists.txt
++++ b/libstreamanalyzer/CMakeLists.txt
+@@ -131,7 +131,7 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/LibStreamAnalyzerConfig.cmake
+ file (GLOB STRIGI_ONTOLOGIES share/strigi/fieldproperties/*.rdfs)
+ install(FILES
+ 	${STRIGI_ONTOLOGIES}
+-	DESTINATION share/strigi/fieldproperties/
++	DESTINATION data/strigi/fieldproperties/
+ )
+ # library
+ if(NOT WIN32)
+-- 
+2.7.0
 
