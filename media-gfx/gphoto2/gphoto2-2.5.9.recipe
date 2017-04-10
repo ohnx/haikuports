@@ -10,7 +10,7 @@ COPYRIGHT="The gphoto2 team"
 LICENSE="GNU GPL v2"
 REVISION="2"
 SOURCE_URI="http://sourceforge.net/projects/gphoto/files/gphoto/$portVersion/gphoto2-$portVersion.tar.gz"
-CHECKSUM_SHA256="cdb0e8e3a93417eb25892c4b03e64c07e93488ce05072edb62e1b70ff3291f32"
+CHECKSUM_SHA256="c63cf5093b7ecd715656e4aed4d62d7a6fc3715c038e501c8addb9f46c32d0ec"
 
 ARCHITECTURES="?x86 ?x86_64"
 
