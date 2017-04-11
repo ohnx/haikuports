@@ -58,6 +58,7 @@ BUILD_PREREQUIRES="
 
 BUILD()
 {
+	touch NEWS ChangeLog
 	libtoolize --force --copy --install
 	aclocal
 	automake --add-missing
