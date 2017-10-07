@@ -65,6 +65,7 @@ BUILD_PREREQUIRES="
 	cmd:make
 	cmd:gcc$secondaryArchSuffix
 	cmd:pkg_config$secondaryArchSuffix
+	cmd:python2$secondaryArchSuffix
 	"
 
 BUILD()
