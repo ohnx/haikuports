@@ -7,7 +7,7 @@ were never designed!"
 HOMEPAGE="https://www.scummvm.org/"
 COPYRIGHT="2001-2014 ScummVM Team"
 LICENSE="GNU GPL v2"
-REVISION="2"
+REVISION="3"
 SOURCE_URI="http://scummvm.org/frs/scummvm/$portVersion/scummvm-$portVersion.tar.xz"
 CHECKSUM_SHA256="2417edcb1ad51ca05a817c58aeee610bc6db5442984e8cf28e8a5fd914e8ae05"
 ADDITIONAL_FILES="scummvm.rdef.in"
@@ -35,10 +35,12 @@ REQUIRES="
 	lib:libmpeg2$secondaryArchSuffix
 	lib:libogg$secondaryArchSuffix
 	lib:libpng16$secondaryArchSuffix
-	lib:libSDL$secondaryArchSuffix
+	lib:libSDL_1.2$secondaryArchSuffix
 	#lib:libsdl_net$secondaryArchSuffix #not needed yet
 	lib:libtheora$secondaryArchSuffix
+	lib:libtheoradec$secondaryArchSuffix
 	lib:libvorbis$secondaryArchSuffix
+	lib:libvorbisfile$secondaryArchSuffix
 	lib:libz$secondaryArchSuffix
 	"
 
@@ -57,7 +59,7 @@ BUILD_REQUIRES="
 	devel:libmpeg2$secondaryArchSuffix
 	devel:libogg$secondaryArchSuffix
 	devel:libpng$secondaryArchSuffix
-	devel:libSDL$secondaryArchSuffix
+	devel:libSDL_1.2$secondaryArchSuffix
 	#devel:libsdl_net$secondaryArchSuffix #not needed yet
 	devel:libtheora$secondaryArchSuffix
 	devel:libvorbis$secondaryArchSuffix
