@@ -6,7 +6,7 @@ as a plotting engine by third-party applications like Octave."
 HOMEPAGE="http://www.gnuplot.info"
 COPYRIGHT="1986 - 1993, 1998, 2004 Thomas Williams, Colin Kelley"
 LICENSE="Gnuplot"
-REVISION="2"
+REVISION="3"
 SOURCE_URI="http://downloads.sourceforge.net/gnuplot/gnuplot-$portVersion.tar.gz"
 CHECKSUM_SHA256="5bbe4713e555c2e103b7d4ffd45fca69551fff09cf5c3f9cb17428aaacc9b460"
 
