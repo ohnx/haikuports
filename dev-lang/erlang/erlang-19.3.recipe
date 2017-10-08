@@ -53,6 +53,7 @@ BUILD_REQUIRES="
 
 BUILD_PREREQUIRES="
 	cmd:bison
+	cmd:find
 	cmd:flex
 	cmd:gcc
 	cmd:make
@@ -68,7 +69,6 @@ ERLANG_CFLAGS="-DETHR_X86_OUT_OF_ORDER \
 				-DHAVE_NET_IF_DL_H \
 				-DETHR_HAVE_ETHREAD_DEFINES \
 				-DETHR_PTHREADS \
-				-DETHR_SIZEOF_PTR=4 \
 				-DHAVE_CONFIG_H \
 				-D_BSD_SOURCE=1 \
 				-I../${effectiveTargetMachineTriple} \
