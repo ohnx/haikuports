@@ -68,7 +68,8 @@ BUILD_PREREQUIRES="
 
 BUILD()
 {
-	cp /system/data/libtool/config/config.guess config/
+	cp /system/data/libtool/config/config.guess config/ \
+		|| cp /system/data/libtool/build-aux/config.guess config/
 	make $jobArgs GLEW_DEST=$prefix BINDIR=$binDir LIBDIR=$libDir INCDIR=$includeDir/GL
 }
 
