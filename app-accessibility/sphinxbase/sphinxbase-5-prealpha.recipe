@@ -1,0 +1,37 @@
+SUMMARY="Temp"
+DESCRIPTION="Ttemp"
+HOMEPAGE="http://www.cstr.ed.ac.uk/projects/speech_tools/"
+SOURCE_URI="http://www.festvox.org/packed/festival/${portVersion}/speech_tools-${portVersion}-release.tar.gz"
+CHECKSUM_SHA256="fbc2482c443919aa79d2e599d6a5faee4e793df55a79ef377f1dc7e8ba237010"
+SOURCE_DIR="speech_tools"
+REVISION="1"
+
+LICENSE=""
+COPYRIGHT=""
+
+ARCHITECTURES="?x86_gcc2 ?x86 x86_64"
+
+PROVIDES=""
+PROVIDES_devel=""
+REQUIRES="
+	haiku
+	"
+REQUIRES_devel="
+	haiku_devel
+	"
+BUILD_REQUIRES="
+	haiku_devel
+	"
+BUILD_PREREQUIRES="
+	cmd:gcc
+	cmd:make
+	"
+
+BUILD()
+{
+	make
+}
+
+INSTALL()
+{
+}
