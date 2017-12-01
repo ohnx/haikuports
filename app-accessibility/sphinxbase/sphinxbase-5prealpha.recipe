@@ -1,5 +1,8 @@
-SUMMARY="Temp"
-DESCRIPTION="Ttemp"
+SUMMARY="Basic libraries shared by CMU Sphinx systems."
+DESCRIPTION="This package contains the basic libraries shared by \
+the CMU Sphinx trainer and all the Sphinx decoders (Sphinx-II, \
+Sphinx-III, and PocketSphinx), as well as some common utilities \
+for manipulating acoustic feature and audio files."
 HOMEPAGE="https://cmusphinx.github.io/"
 SOURCE_URI="https://sf.net/projects/cmusphinx/files/sphinxbase/5prealpha/sphinxbase-${portVersion}.tar.gz"
 #CHECKSUM_SHA256=""
@@ -9,8 +12,12 @@ LICENSE="sphinxbase"
 
 ARCHITECTURES="?x86_gcc2 ?x86 x86_64"
 
-PROVIDES=""
-PROVIDES_devel=""
+PROVIDES="
+	sphinxbase = $portVersion
+	"
+PROVIDES_devel="
+	lib:sphinxbase
+	"
 REQUIRES="
 	haiku
 	"
