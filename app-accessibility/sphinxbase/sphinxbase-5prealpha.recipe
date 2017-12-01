@@ -4,29 +4,39 @@ the CMU Sphinx trainer and all the Sphinx decoders (Sphinx-II, \
 Sphinx-III, and PocketSphinx), as well as some common utilities \
 for manipulating acoustic feature and audio files."
 HOMEPAGE="https://cmusphinx.github.io/"
-SOURCE_URI="https://sf.net/projects/cmusphinx/files/sphinxbase/5prealpha/sphinxbase-${portVersion}.tar.gz"
-CHECKSUM_SHA256="f72bdb59e50b558bed47cc2105777200d2b246a0f328e913de16a9b22f9a246f"
-REVISION="1"
 COPYRIGHT="1999-2016 Carnegie Mellon University"
 LICENSE="sphinxbase"
+REVISION="1"
+SOURCE_URI="https://sf.net/projects/cmusphinx/files/sphinxbase/5prealpha/sphinxbase-${portVersion}.tar.gz"
+CHECKSUM_SHA256="f72bdb59e50b558bed47cc2105777200d2b246a0f328e913de16a9b22f9a246f"
 
 ARCHITECTURES="?x86_gcc2 ?x86 x86_64"
 
 PROVIDES="
 	sphinxbase = $portVersion
-	"
-PROVIDES_devel="
-	lib:sphinxbase
+	cmd:sphinx_cepview
+	cmd:sphinx_cont_seg
+	cmd:sphinx_fe
+	cmd:sphinx_jsgf2fsg
+	cmd:sphinx_lm_convert
+	cmd:sphinx_lm_eval
+	cmd:sphinx_pitch
+	lib:libsphinxbase
+	lib:libsphinxad
 	"
 REQUIRES="
 	haiku
 	"
+
+PROVIDES_devel="
+	sphinxbase_devel = $portVersion
+	devel:libsphinxbase
+	devel:libsphinxad
+	"
 REQUIRES_devel="
-	haiku_devel
+	sphinxbase == $portVersion base
 	"
-BUILD_REQUIRES="
-	haiku_devel
-	"
+
 BUILD_PREREQUIRES="
 	cmd:gcc
 	cmd:make
@@ -36,6 +46,9 @@ BUILD_PREREQUIRES="
 	cmd:bison
 	cmd:python
 	cmd:swig
+	"
+BUILD_REQUIRES="
+	haiku_devel
 	"
 
 BUILD()
@@ -47,5 +60,31 @@ BUILD()
 
 INSTALL()
 {
+	# put the binaries + whatnot into a known location
 	make install
+	# libraries (shared + static)
+	install -d $libDir $developLibDir
+	cp -r /usr/local/lib/* $libDir
+	prepareInstalledDevelLib libsphinxbase
+	prepareInstalledDevelLib libsphinxad
+	fixPkgconfig
+	# headers
+	install -d $includeDir/sphinxbase
+	install -t $includeDir/sphinxbase /usr/local/include/sphinxbase/*
+	# binaries
+	install -d $binDir
+	install -t $binDir /usr/local/bin/*
+	# documentation
+	install -d $manDir/man1
+	install -t $manDir/man1 /usr/local/share/man/man1/*
+	# misc stuff
+	install -d $dataDir/
+	cp -r /usr/local/non-packaged/* $dataDir
+	# develop package
+	packageEntries devel $developDir
+}
+
+TEST()
+{
+	make check
 }
