@@ -35,4 +35,5 @@ BUILD()
 
 INSTALL()
 {
+	make install
 }
