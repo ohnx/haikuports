@@ -1,4 +1,4 @@
-SUMMARY="Basic libraries shared by CMU Sphinx systems."
+SUMMARY="Basic libraries shared by CMU Sphinx systems"
 DESCRIPTION="This package contains the basic libraries shared by \
 the CMU Sphinx trainer and all the Sphinx decoders (Sphinx-II, \
 Sphinx-III, and PocketSphinx), as well as some common utilities \
